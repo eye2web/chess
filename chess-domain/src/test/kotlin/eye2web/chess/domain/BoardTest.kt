@@ -17,12 +17,12 @@ class BoardTest {
     @Test
     fun tilePositionTest() {
         val board = Board()
-        val tiles = board.getTiles()
+
         Row.entries.forEachIndexed { rowIndex, row ->
             Column.entries.forEachIndexed { colIndex, column ->
                 val invertedRowIndex = abs(rowIndex - (Position.BOARD_WIDTH - 1))
                 val index = (invertedRowIndex * 8) + colIndex
-                val tile = tiles[index]
+                val tile = board.getTileFor(Position.indexToPosition(index))
 
                 assertEquals(row, tile.position.row)
                 assertEquals(column, tile.position.column)
@@ -72,8 +72,8 @@ class BoardTest {
         val capturedPiece = board.movePiece(Position(Row.ONE, Column.A), Position(Row.SEVEN, Column.A))
 
         assertEquals(rookToCapture, capturedPiece)
-        assertEquals(Position(Row.SEVEN, Column.A), board.getPosition(rookToMove))
-        assertNull(board.getTiles()[Position(Row.ONE, Column.A).toIndex()].piece)
+        assertEquals(Position(Row.SEVEN, Column.A), board.getPositionForPiece(rookToMove))
+        assertNull(board.getTileFor(Position(Row.ONE, Column.A)).piece)
     }
 
     @Test
@@ -83,6 +83,6 @@ class BoardTest {
         board.setPieceOnTile(Position(Row.ONE, Column.A), rook)
         board.movePiece(Position(Row.ONE, Column.A), Position(Row.ONE, Column.G))
 
-        assertEquals(board.getTiles()[Position(Row.ONE, Column.G).toIndex()].piece!!, rook)
+        assertEquals(board.getTileFor(Position(Row.ONE, Column.G)).piece!!, rook)
     }
 }

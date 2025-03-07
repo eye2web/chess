@@ -14,8 +14,8 @@ class Board {
     private val tiles: List<Tile> =
         IntStream.range(0, BOARD_WIDTH * BOARD_WIDTH).boxed().map { Tile(indexToPosition(it)) }.toList()
 
-    fun getTiles(): List<Tile> {
-        return tiles
+    fun getTileFor(position: Position): Tile {
+        return position.getTile()
     }
 
     fun movePiece(fromPosition: Position, targetPosition: Position): Piece? {
@@ -23,14 +23,14 @@ class Board {
         val fromTile = fromPosition.getTile()
         val pieceToMove = fromTile.piece ?: throw NoPieceLocatedException("No Piece found for position $fromPosition")
 
-        validateMove(pieceToMove, targetPosition)
+        validatePieceMovement(pieceToMove, targetPosition)
 
         val capturedPiece = movePieceToTile(fromTile, targetPosition, pieceToMove)
 
         return capturedPiece
     }
 
-    fun getPosition(piece: Piece): Position {
+    fun getPositionForPiece(piece: Piece): Position {
         return tiles.filter { it.piece !== null }.find { it.piece!! == piece }?.position
             ?: throw PieceNotOnBoardException("$piece not located on the board")
     }
@@ -41,7 +41,8 @@ class Board {
         return currentPiece
     }
 
-    fun getValidLinearMovesForPiece(forPiece: Piece, possibleTiles: List<Tile>): List<Position> {
+    fun getValidLinearMovesForPiece(forPiece: Piece, possiblePositions: List<Position>): List<Position> {
+        val possibleTiles = possiblePositions.map { position -> position.getTile() }.toList()
         val positions: MutableList<Position> = mutableListOf()
 
         run breaking@{
@@ -66,7 +67,7 @@ class Board {
         return currentPiece
     }
 
-    private fun validateMove(
+    private fun validatePieceMovement(
         pieceToMove: Piece,
         targetPosition: Position
     ) {
