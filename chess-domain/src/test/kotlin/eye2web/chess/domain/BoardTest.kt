@@ -1,9 +1,8 @@
 package eye2web.chess.domain
 
-import eye2web.chess.domain.model.Board
 import eye2web.chess.domain.model.Color
-import eye2web.chess.domain.model.exception.InvalidMoveException
-import eye2web.chess.domain.model.exception.NoPieceLocatedException
+import eye2web.chess.domain.exception.InvalidMoveException
+import eye2web.chess.domain.exception.NoPieceLocatedException
 import eye2web.chess.domain.model.pieces.Rook
 import eye2web.chess.domain.model.position.Column
 import eye2web.chess.domain.model.position.Position

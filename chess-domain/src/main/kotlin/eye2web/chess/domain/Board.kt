@@ -1,8 +1,9 @@
-package eye2web.chess.domain.model
+package eye2web.chess.domain
 
-import eye2web.chess.domain.model.exception.InvalidMoveException
-import eye2web.chess.domain.model.exception.NoPieceLocatedException
-import eye2web.chess.domain.model.exception.PieceNotOnBoardException
+import eye2web.chess.domain.model.Tile
+import eye2web.chess.domain.exception.InvalidMoveException
+import eye2web.chess.domain.exception.NoPieceLocatedException
+import eye2web.chess.domain.exception.PieceNotOnBoardException
 import eye2web.chess.domain.model.pieces.Piece
 import eye2web.chess.domain.model.position.Position
 import eye2web.chess.domain.model.position.Position.Companion.BOARD_WIDTH
