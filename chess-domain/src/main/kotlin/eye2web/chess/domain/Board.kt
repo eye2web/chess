@@ -61,6 +61,10 @@ class Board {
         return positions
     }
 
+    fun getValidMovesForPiece(forPiece: Piece): List<Position> {
+        return forPiece.getValidMoves(this)
+    }
+
     private fun movePieceToTile(fromTile: Tile, position: Position, piece: Piece): Piece? {
         val currentPiece = setPieceOnTile(position, piece)
         fromTile.piece = null
@@ -71,7 +75,7 @@ class Board {
         pieceToMove: Piece,
         targetPosition: Position
     ) {
-        if (!pieceToMove.getValidMoves(this).contains(targetPosition)) {
+        if (!getValidMovesForPiece(pieceToMove).contains(targetPosition)) {
             throw InvalidMoveException("Invalid move position $targetPosition for piece $pieceToMove")
         }
     }

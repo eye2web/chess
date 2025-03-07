@@ -10,7 +10,6 @@ data class Position(val row: Row, val column: Column) {
 
         fun indexToPosition(index: Int): Position {
             val row = (index / BOARD_WIDTH)
-            //val invertedRow = BOARD_WIDTH - row - 1
             val col = index - (row * BOARD_WIDTH)
 
             return Position(Row.valueOf(row), Column.valueOf(col))
@@ -32,6 +31,20 @@ data class Position(val row: Row, val column: Column) {
             .toList()
     }
 
+    fun getPositionsNorthEast(): List<Position> {
+        val startIndex = this.toIndex()
+
+        val timesNorth = this.row.index
+        val timesEast = BOARD_WIDTH - this.column.index - 1
+        val timesNorthEast = listOf(timesNorth, timesEast).minOf { it }
+
+        return IntStream.range(0, timesNorthEast).boxed()
+            .map { multiplier -> multiplier + 1 }
+            .map { multiplier -> startIndex - (multiplier * (BOARD_WIDTH - 1)) }
+            .map { indexToPosition(it) }
+            .toList()
+    }
+
     fun getPositionsEast(): List<Position> {
         val startIndex = this.toIndex()
         val timesEast = BOARD_WIDTH - this.column.index - 1
@@ -39,6 +52,21 @@ data class Position(val row: Row, val column: Column) {
         return IntStream.range(0, timesEast).boxed()
             .map { eastIndex -> eastIndex + 1 }
             .map { eastIndex -> startIndex + eastIndex }
+            .map { indexToPosition(it) }
+            .toList()
+    }
+
+    fun getPositionsSouthEast(): List<Position> {
+        val startIndex = this.toIndex()
+
+        val timesEast = BOARD_WIDTH - this.column.index - 1
+        val timesSouth = abs(this.row.index - (BOARD_WIDTH - 1))
+
+        val timesSouthEast = listOf(timesSouth, timesEast).minOf { it }
+
+        return IntStream.range(0, timesSouthEast).boxed()
+            .map { multiplier -> multiplier + 1 }
+            .map { multiplier -> startIndex + (multiplier * (BOARD_WIDTH + 1)) }
             .map { indexToPosition(it) }
             .toList()
     }
@@ -54,6 +82,21 @@ data class Position(val row: Row, val column: Column) {
             .toList()
     }
 
+    fun getPositionsSouthWest(): List<Position> {
+        val startIndex = this.toIndex()
+
+        val timesWest = this.column.index
+        val timesSouth = abs(this.row.index - (BOARD_WIDTH - 1))
+
+        val timesSouthWest = listOf(timesSouth, timesWest).minOf { it }
+
+        return IntStream.range(0, timesSouthWest).boxed()
+            .map { multiplier -> multiplier + 1 }
+            .map { multiplier -> startIndex + (multiplier * (BOARD_WIDTH - 1)) }
+            .map { indexToPosition(it) }
+            .toList()
+    }
+
     fun getPositionsWest(): List<Position> {
         val startIndex = this.toIndex()
         val timesWest = this.column.index
@@ -61,6 +104,20 @@ data class Position(val row: Row, val column: Column) {
         return IntStream.range(0, timesWest).boxed()
             .map { westIndex -> westIndex + 1 }
             .map { westIndex -> startIndex - westIndex }
+            .map { indexToPosition(it) }
+            .toList()
+    }
+
+    fun getPositionsNorthWest(): List<Position> {
+        val startIndex = this.toIndex()
+
+        val timesWest = this.column.index
+        val timesNorth = this.row.index
+        val timesNorthWest = listOf(timesNorth, timesWest).minOf { it }
+
+        return IntStream.range(0, timesNorthWest).boxed()
+            .map { multiplier -> multiplier + 1 }
+            .map { multiplier -> startIndex - (multiplier * (BOARD_WIDTH + 1)) }
             .map { indexToPosition(it) }
             .toList()
     }

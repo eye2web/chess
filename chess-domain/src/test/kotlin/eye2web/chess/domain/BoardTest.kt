@@ -3,6 +3,7 @@ package eye2web.chess.domain
 import eye2web.chess.domain.model.Color
 import eye2web.chess.domain.exception.InvalidMoveException
 import eye2web.chess.domain.exception.NoPieceLocatedException
+import eye2web.chess.domain.model.pieces.Bishop
 import eye2web.chess.domain.model.pieces.Rook
 import eye2web.chess.domain.model.position.Column
 import eye2web.chess.domain.model.position.Position
@@ -10,6 +11,7 @@ import eye2web.chess.domain.model.position.Row
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -38,6 +40,20 @@ class BoardTest {
         assertThrows<NoPieceLocatedException> {
             board.movePiece(Position(Row.ONE, Column.A), Position(Row.TWO, Column.A))
         }
+    }
+
+    @Test
+    fun validRookPositionsTest() {
+        val board = Board()
+        val rook = Rook(Color.WHITE)
+        board.setPieceOnTile(Position(Row.TWO, Column.C), rook)
+
+        val validMoves = board.getValidMovesForPiece(rook)
+
+        assertContains(validMoves, Position(Row.EIGHT, Column.C))
+        assertContains(validMoves, Position(Row.TWO, Column.H))
+        assertContains(validMoves, Position(Row.ONE, Column.C))
+        assertContains(validMoves, Position(Row.TWO, Column.A))
     }
 
     @Test
@@ -85,4 +101,32 @@ class BoardTest {
 
         assertEquals(board.getTileFor(Position(Row.ONE, Column.G)).piece!!, rook)
     }
+
+    @Test
+    fun validBishopPositionsTest() {
+        val board = Board()
+        val bishop = Bishop(Color.WHITE)
+
+        board.setPieceOnTile(Position(Row.THREE, Column.C), bishop)
+
+        val validMoves = board.getValidMovesForPiece(bishop)
+
+        assertContains(validMoves, Position(Row.EIGHT, Column.H))
+        assertContains(validMoves, Position(Row.ONE, Column.E))
+        assertContains(validMoves, Position(Row.ONE, Column.A))
+        assertContains(validMoves, Position(Row.FIVE, Column.A))
+    }
+
+    @Test
+    fun invalidBishopPositionsTest() {
+        val board = Board()
+        val bishop = Bishop(Color.WHITE)
+
+        board.setPieceOnTile(Position(Row.THREE, Column.C), bishop)
+
+        assertThrows<InvalidMoveException> {
+            board.movePiece(Position(Row.THREE, Column.C), Position(Row.TWO, Column.C))
+        }
+    }
+
 }
