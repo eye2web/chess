@@ -41,6 +41,25 @@ class Board {
         return currentPiece
     }
 
+    fun getValidLinearMovesForPiece(forPiece: Piece, possibleTiles: List<Tile>): List<Position> {
+        val positions: MutableList<Position> = mutableListOf()
+
+        run breaking@{
+            possibleTiles.forEach { tile ->
+
+                tile.piece?.let { piece: Piece ->
+                    if (piece.color != forPiece.color) {
+                        positions.add(tile.position)
+                    }
+                    return@breaking
+                }
+
+                positions.add(tile.position)
+            }
+        }
+        return positions
+    }
+
     private fun movePieceToTile(fromTile: Tile, position: Position, piece: Piece): Piece? {
         val currentPiece = setPieceOnTile(position, piece)
         fromTile.piece = null
