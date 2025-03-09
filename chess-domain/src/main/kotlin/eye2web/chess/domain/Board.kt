@@ -61,6 +61,23 @@ class Board {
         return positions
     }
 
+    fun getValidSingleMovesForPiece(forPiece: Piece, possiblePositions: List<Position>): List<Position> {
+        val possibleTiles = possiblePositions.map { position -> position.getTile() }.toList()
+        val positions: MutableList<Position> = mutableListOf()
+
+        possibleTiles.forEach { tile ->
+            tile.piece?.let { piece: Piece ->
+                if (piece.color != forPiece.color) {
+                    positions.add(tile.position)
+                }
+                return@forEach
+            }
+            positions.add(tile.position)
+        }
+
+        return positions
+    }
+
     fun getValidMovesForPiece(forPiece: Piece): List<Position> {
         return forPiece.getValidMoves(this)
     }

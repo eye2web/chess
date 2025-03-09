@@ -121,4 +121,59 @@ data class Position(val row: Row, val column: Column) {
             .map { indexToPosition(it) }
             .toList()
     }
+
+    fun getJumpingPositionsInAllDirections(): List<Position> {
+        val startIndex = this.toIndex()
+
+        val timesNorth = this.row.index
+        val timesEast = BOARD_WIDTH - this.column.index - 1
+        val timesSouth = abs(this.row.index - (BOARD_WIDTH - 1))
+        val timesWest = this.column.index
+
+        val positionsToMove = 2
+
+        val positions = mutableListOf<Position>()
+
+        if (timesSouth >= positionsToMove) {
+            if (timesEast > 0) {
+                positions.add(indexToPosition(startIndex + (BOARD_WIDTH * positionsToMove) + 1))
+            }
+
+            if (timesWest > 0) {
+                positions.add(indexToPosition(startIndex + (BOARD_WIDTH * positionsToMove) - 1))
+            }
+        }
+
+        if (timesEast >= positionsToMove) {
+            if (timesNorth > 0) {
+                positions.add(indexToPosition(startIndex - (BOARD_WIDTH - positionsToMove)))
+            }
+
+            if (timesSouth > 0) {
+                positions.add(indexToPosition(startIndex + (BOARD_WIDTH + positionsToMove)))
+            }
+        }
+
+        if (timesNorth >= positionsToMove) {
+            if (timesEast > 0) {
+                positions.add(indexToPosition(startIndex - (BOARD_WIDTH * positionsToMove) - 1))
+            }
+
+            if (timesWest > 0) {
+                positions.add(indexToPosition(startIndex - (BOARD_WIDTH * positionsToMove) + 1))
+            }
+        }
+
+        if (timesWest >= positionsToMove) {
+            if (timesNorth > 0) {
+                positions.add(indexToPosition(startIndex - BOARD_WIDTH - positionsToMove))
+            }
+
+            if (timesSouth > 0) {
+                positions.add(indexToPosition(startIndex + BOARD_WIDTH - positionsToMove))
+            }
+        }
+
+        return positions
+    }
 }

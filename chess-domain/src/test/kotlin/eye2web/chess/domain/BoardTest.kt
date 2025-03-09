@@ -4,6 +4,7 @@ import eye2web.chess.domain.model.Color
 import eye2web.chess.domain.exception.InvalidMoveException
 import eye2web.chess.domain.exception.NoPieceLocatedException
 import eye2web.chess.domain.model.pieces.Bishop
+import eye2web.chess.domain.model.pieces.Knight
 import eye2web.chess.domain.model.pieces.Rook
 import eye2web.chess.domain.model.position.Column
 import eye2web.chess.domain.model.position.Position
@@ -127,6 +128,43 @@ class BoardTest {
         assertThrows<InvalidMoveException> {
             board.movePiece(Position(Row.THREE, Column.C), Position(Row.TWO, Column.C))
         }
+    }
+
+    @Test
+    fun validKnightPositionsTest() {
+        val board = Board()
+        val knight = Knight(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+
+        board.setPieceOnTile(Position(Row.THREE, Column.C), knight)
+        board.setPieceOnTile(Position(Row.TWO, Column.A), rook)
+
+        val validMoves = board.getValidMovesForPiece(knight)
+
+        assertEquals(7, validMoves.size)
+        assertContains(validMoves, Position(Row.FIVE, Column.B))
+        assertContains(validMoves, Position(Row.FIVE, Column.D))
+        assertContains(validMoves, Position(Row.FOUR, Column.E))
+        assertContains(validMoves, Position(Row.TWO, Column.E))
+        assertContains(validMoves, Position(Row.ONE, Column.D))
+        assertContains(validMoves, Position(Row.ONE, Column.B))
+        assertContains(validMoves, Position(Row.FOUR, Column.A))
+    }
+
+    @Test
+    fun validKnightPositions2Test() {
+        val board = Board()
+        val knight = Knight(Color.WHITE)
+        val knight2 = Knight(Color.WHITE)
+
+        board.setPieceOnTile(Position(Row.ONE, Column.A), knight)
+        board.setPieceOnTile(Position(Row.ONE, Column.H), knight2)
+
+        val validMoves = board.getValidMovesForPiece(knight)
+        val validMoves2 = board.getValidMovesForPiece(knight2)
+
+        assertEquals(2, validMoves.size)
+        assertEquals(2, validMoves2.size)
     }
 
 }
