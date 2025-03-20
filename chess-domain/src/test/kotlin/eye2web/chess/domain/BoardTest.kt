@@ -14,7 +14,9 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class BoardTest {
     @Test
@@ -86,12 +88,29 @@ class BoardTest {
         board.setPieceOnTile(Position(Row.ONE, Column.A), rookToMove)
         board.setPieceOnTile(Position(Row.SEVEN, Column.A), rookToCapture)
 
+        assertTrue(rookToMove.isFirstMove(board))
+
         val capturedPiece = board.movePiece(Position(Row.ONE, Column.A), Position(Row.SEVEN, Column.A))
 
-        assertEquals(rookToCapture, capturedPiece)
-        assertNull(capturedPiece?.position)
+        // -- Check movement --
+        assertFalse(rookToMove.isFirstMove(board))
         assertEquals(Position(Row.SEVEN, Column.A), rookToMove.position)
         assertNull(board.getTileFor(Position(Row.ONE, Column.A)).piece)
+
+        // -- Check capture --
+        assertEquals(rookToCapture, capturedPiece)
+        assertNull(capturedPiece?.position)
+
+        // -- Check history of moves --
+        assertEquals(1, board.getMovementHistory().size)
+        val firstMove = board.getMovementHistory()[0]
+
+        assertEquals(rookToMove, firstMove.piece)
+        assertEquals(Position(Row.ONE, Column.A), firstMove.fromPosition)
+        assertEquals(Position(Row.SEVEN, Column.A), firstMove.toPosition)
+
+        board.clearMovementHistory()
+        assertEquals(0, board.getMovementHistory().size)
     }
 
     @Test

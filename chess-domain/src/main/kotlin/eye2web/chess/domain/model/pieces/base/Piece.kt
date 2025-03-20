@@ -10,6 +10,8 @@ interface Piece {
 
     fun hasPositionOnBoard(): Boolean
 
+    fun isFirstMove(board: Board): Boolean
+
     fun getValidMoves(board: Board): List<Position>
 
     fun addValidMoves(

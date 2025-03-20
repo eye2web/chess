@@ -5,6 +5,10 @@ import eye2web.chess.domain.model.position.Position
 
 abstract class BasePiece : Piece {
 
+    override fun isFirstMove(board: Board): Boolean {
+        return board.getMovementHistory().find { it.piece == this }?.let { false } ?: true
+    }
+
     override fun getValidMoves(board: Board): List<Position> {
         val validPositions = mutableListOf<Position>()
 
