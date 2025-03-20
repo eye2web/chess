@@ -2,38 +2,35 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
-class Rook(override val color: Color) : Piece {
-    override fun getValidMoves(board: Board): List<Position> {
-        val myPos = board.getPositionForPiece(this)
-        
-        val validPositions = mutableListOf<Position>()
-        validPositions.addAll(
-            board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsNorth()
-            )
-        )
-        validPositions.addAll(
-            board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsEast()
-            )
-        )
-        validPositions.addAll(
-            board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsSouth()
-            )
-        )
-        validPositions.addAll(
-            board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsWest()
-            )
-        )
+class Rook(override val color: Color, override var position: Position? = null) : BasePiece() {
 
-        return validPositions
+    override fun addValidMoves(validPositions: MutableList<Position>, board: Board) {
+        validPositions.addAll(
+            board.getValidLinearMovesForPiece(
+                color,
+                position!!.getPositionsNorth()
+            )
+        )
+        validPositions.addAll(
+            board.getValidLinearMovesForPiece(
+                color,
+                position!!.getPositionsEast()
+            )
+        )
+        validPositions.addAll(
+            board.getValidLinearMovesForPiece(
+                color,
+                position!!.getPositionsSouth()
+            )
+        )
+        validPositions.addAll(
+            board.getValidLinearMovesForPiece(
+                color,
+                position!!.getPositionsWest()
+            )
+        )
     }
 }

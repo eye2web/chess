@@ -89,7 +89,8 @@ class BoardTest {
         val capturedPiece = board.movePiece(Position(Row.ONE, Column.A), Position(Row.SEVEN, Column.A))
 
         assertEquals(rookToCapture, capturedPiece)
-        assertEquals(Position(Row.SEVEN, Column.A), board.getPositionForPiece(rookToMove))
+        assertNull(capturedPiece?.position)
+        assertEquals(Position(Row.SEVEN, Column.A), rookToMove.position)
         assertNull(board.getTileFor(Position(Row.ONE, Column.A)).piece)
     }
 

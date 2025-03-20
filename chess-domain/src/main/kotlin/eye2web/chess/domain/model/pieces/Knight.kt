@@ -2,22 +2,18 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
 
-class Knight(override val color: Color) : Piece {
-    override fun getValidMoves(board: Board): List<Position> {
-        val myPos = board.getPositionForPiece(this)
+class Knight(override val color: Color, override var position: Position? = null) : BasePiece() {
 
-        val validPositions = mutableListOf<Position>()
-
+    override fun addValidMoves(validPositions: MutableList<Position>, board: Board) {
         validPositions.addAll(
             board.getValidSingleMovesForPiece(
-                this,
-                myPos.getJumpingPositionsInAllDirections()
+                color,
+                position!!.getJumpingPositionsInAllDirections()
             )
         )
-
-        return validPositions
     }
 }

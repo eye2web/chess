@@ -2,38 +2,38 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
-class Bishop(override val color: Color) : Piece {
-    override fun getValidMoves(board: Board): List<Position> {
-        val myPos = board.getPositionForPiece(this)
+class Bishop(override val color: Color, override var position: Position? = null) : BasePiece() {
 
-        val validPositions = mutableListOf<Position>()
+    override fun addValidMoves(
+        validPositions: MutableList<Position>,
+        board: Board
+    ) {
         validPositions.addAll(
             board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsNorthEast()
+                color,
+                position!!.getPositionsNorthEast()
             )
         )
         validPositions.addAll(
             board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsSouthEast()
+                color,
+                position!!.getPositionsSouthEast()
             )
         )
         validPositions.addAll(
             board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsSouthWest()
+                color,
+                position!!.getPositionsSouthWest()
             )
         )
         validPositions.addAll(
             board.getValidLinearMovesForPiece(
-                this,
-                myPos.getPositionsNorthWest()
+                color,
+                position!!.getPositionsNorthWest()
             )
         )
-
-        return validPositions
     }
 }

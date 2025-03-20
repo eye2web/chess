@@ -3,8 +3,9 @@ package eye2web.chess.domain
 import eye2web.chess.domain.model.Tile
 import eye2web.chess.domain.exception.InvalidMoveException
 import eye2web.chess.domain.exception.NoPieceLocatedException
-import eye2web.chess.domain.exception.PieceNotOnBoardException
-import eye2web.chess.domain.model.pieces.Piece
+import eye2web.chess.domain.model.Color
+
+import eye2web.chess.domain.model.pieces.base.Piece
 import eye2web.chess.domain.model.position.Position
 import eye2web.chess.domain.model.position.Position.Companion.BOARD_WIDTH
 import eye2web.chess.domain.model.position.Position.Companion.indexToPosition
@@ -15,12 +16,12 @@ class Board {
         IntStream.range(0, BOARD_WIDTH * BOARD_WIDTH).boxed().map { Tile(indexToPosition(it)) }.toList()
 
     fun getTileFor(position: Position): Tile {
-        return position.getTile()
+        return tiles[position.toIndex()]
     }
 
     fun movePiece(fromPosition: Position, targetPosition: Position): Piece? {
 
-        val fromTile = fromPosition.getTile()
+        val fromTile = getTileFor(fromPosition)
         val pieceToMove = fromTile.piece ?: throw NoPieceLocatedException("No Piece found for position $fromPosition")
 
         validatePieceMovement(pieceToMove, targetPosition)
@@ -30,26 +31,24 @@ class Board {
         return capturedPiece
     }
 
-    fun getPositionForPiece(piece: Piece): Position {
-        return tiles.filter { it.piece !== null }.find { it.piece!! == piece }?.position
-            ?: throw PieceNotOnBoardException("$piece not located on the board")
-    }
-
     fun setPieceOnTile(position: Position, piece: Piece): Piece? {
-        val currentPiece = position.getTile().piece
-        position.getTile().piece = piece
+        val currentPiece = getTileFor(position).piece
+        currentPiece?.let { it.position = null }
+
+        piece.position = position
+        getTileFor(position).piece = piece
         return currentPiece
     }
 
-    fun getValidLinearMovesForPiece(forPiece: Piece, possiblePositions: List<Position>): List<Position> {
-        val possibleTiles = possiblePositions.map { position -> position.getTile() }.toList()
+    fun getValidLinearMovesForPiece(pieceColor: Color, possiblePositions: List<Position>): List<Position> {
+        val possibleTiles = possiblePositions.map { position -> getTileFor(position) }.toList()
         val positions: MutableList<Position> = mutableListOf()
 
         run breaking@{
             possibleTiles.forEach { tile ->
 
                 tile.piece?.let { piece: Piece ->
-                    if (piece.color != forPiece.color) {
+                    if (piece.color != pieceColor) {
                         positions.add(tile.position)
                     }
                     return@breaking
@@ -61,13 +60,13 @@ class Board {
         return positions
     }
 
-    fun getValidSingleMovesForPiece(forPiece: Piece, possiblePositions: List<Position>): List<Position> {
-        val possibleTiles = possiblePositions.map { position -> position.getTile() }.toList()
+    fun getValidSingleMovesForPiece(pieceColor: Color, possiblePositions: List<Position>): List<Position> {
+        val possibleTiles = possiblePositions.map { position -> getTileFor(position) }.toList()
         val positions: MutableList<Position> = mutableListOf()
 
         possibleTiles.forEach { tile ->
             tile.piece?.let { piece: Piece ->
-                if (piece.color != forPiece.color) {
+                if (piece.color != pieceColor) {
                     positions.add(tile.position)
                 }
                 return@forEach
@@ -85,6 +84,7 @@ class Board {
     private fun movePieceToTile(fromTile: Tile, position: Position, piece: Piece): Piece? {
         val currentPiece = setPieceOnTile(position, piece)
         fromTile.piece = null
+        currentPiece?.let { it.position = null }
         return currentPiece
     }
 
@@ -95,9 +95,5 @@ class Board {
         if (!getValidMovesForPiece(pieceToMove).contains(targetPosition)) {
             throw InvalidMoveException("Invalid move position $targetPosition for piece $pieceToMove")
         }
-    }
-
-    private fun Position.getTile(): Tile {
-        return tiles[this.toIndex()]
     }
 }
