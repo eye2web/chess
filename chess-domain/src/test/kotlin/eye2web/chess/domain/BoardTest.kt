@@ -85,15 +85,20 @@ class BoardTest {
         val board = Board()
         val rookToMove = Rook(Color.WHITE)
         val rookToCapture = Rook(Color.BLACK)
+
+        // Rook should not be on the board yet
+        assertFalse(rookToMove.hasPositionOnBoard(board))
+
         board.setPieceOnTile(Position(Row.ONE, Column.A), rookToMove)
         board.setPieceOnTile(Position(Row.SEVEN, Column.A), rookToCapture)
 
-        assertTrue(rookToMove.isFirstMove(board))
+        assertTrue(rookToMove.hasPositionOnBoard(board))
+        assertTrue(rookToMove.isFirstMove)
 
         val capturedPiece = board.movePiece(Position(Row.ONE, Column.A), Position(Row.SEVEN, Column.A))
 
         // -- Check movement --
-        assertFalse(rookToMove.isFirstMove(board))
+        assertFalse(rookToMove.isFirstMove)
         assertEquals(Position(Row.SEVEN, Column.A), rookToMove.position)
         assertNull(board.getTileFor(Position(Row.ONE, Column.A)).piece)
 

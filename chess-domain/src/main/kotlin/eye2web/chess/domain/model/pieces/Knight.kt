@@ -6,7 +6,11 @@ import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
 
-class Knight(override val color: Color, override var position: Position? = null) : BasePiece() {
+class Knight(
+    override val color: Color,
+    override var position: Position? = null,
+    override var isFirstMove: Boolean = true
+) : BasePiece() {
 
     override fun addValidMoves(validPositions: MutableList<Position>, board: Board) {
         validPositions.addAll(

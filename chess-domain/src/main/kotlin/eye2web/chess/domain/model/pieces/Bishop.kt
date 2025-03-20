@@ -5,7 +5,11 @@ import eye2web.chess.domain.model.Color
 import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
-class Bishop(override val color: Color, override var position: Position? = null) : BasePiece() {
+class Bishop(
+    override val color: Color,
+    override var position: Position? = null,
+    override var isFirstMove: Boolean = true
+) : BasePiece() {
 
     override fun addValidMoves(
         validPositions: MutableList<Position>,

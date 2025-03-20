@@ -37,7 +37,6 @@ class Board {
     fun setPieceOnTile(position: Position, piece: Piece): Piece? {
         val currentPiece = getTileFor(position).piece
         currentPiece?.let { it.position = null }
-
         piece.position = position
         getTileFor(position).piece = piece
         return currentPiece
@@ -94,6 +93,7 @@ class Board {
 
     private fun movePieceToTile(fromTile: Tile, position: Position, piece: Piece): Piece? {
         val currentPiece = setPieceOnTile(position, piece)
+        piece.isFirstMove = false
         fromTile.piece = null
         return currentPiece
     }
