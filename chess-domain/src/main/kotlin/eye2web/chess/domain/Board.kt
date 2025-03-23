@@ -3,7 +3,6 @@ package eye2web.chess.domain
 import eye2web.chess.domain.model.Tile
 import eye2web.chess.domain.exception.InvalidMoveException
 import eye2web.chess.domain.exception.NoPieceLocatedException
-import eye2web.chess.domain.model.Color
 import eye2web.chess.domain.model.actions.Movement
 
 import eye2web.chess.domain.model.pieces.base.Piece
@@ -20,6 +19,10 @@ class Board {
 
     fun getTileFor(position: Position): Tile {
         return tiles[position.toIndex()]
+    }
+
+    fun getTilesFor(positions: List<Position>): List<Tile> {
+        return positions.map { getTileFor(it) }.toList()
     }
 
     fun movePiece(fromPosition: Position, targetPosition: Position): Piece? {
@@ -40,43 +43,6 @@ class Board {
         piece.position = position
         getTileFor(position).piece = piece
         return currentPiece
-    }
-
-    fun getValidLinearMovesForPiece(pieceColor: Color, possiblePositions: List<Position>): List<Position> {
-        val possibleTiles = possiblePositions.map { position -> getTileFor(position) }.toList()
-        val positions: MutableList<Position> = mutableListOf()
-
-        run breaking@{
-            possibleTiles.forEach { tile ->
-
-                tile.piece?.let { piece: Piece ->
-                    if (piece.color != pieceColor) {
-                        positions.add(tile.position)
-                    }
-                    return@breaking
-                }
-
-                positions.add(tile.position)
-            }
-        }
-        return positions
-    }
-
-    fun getValidSingleMovesForPiece(pieceColor: Color, possiblePositions: List<Position>): List<Position> {
-        val possibleTiles = possiblePositions.map { position -> getTileFor(position) }.toList()
-        val positions: MutableList<Position> = mutableListOf()
-
-        possibleTiles.forEach { tile ->
-            tile.piece?.let { piece: Piece ->
-                if (piece.color != pieceColor) {
-                    positions.add(tile.position)
-                }
-                return@forEach
-            }
-            positions.add(tile.position)
-        }
-
-        return positions
     }
 
     fun getValidMovesForPiece(forPiece: Piece): List<Position> {

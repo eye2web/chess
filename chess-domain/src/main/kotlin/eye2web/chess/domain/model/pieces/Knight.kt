@@ -2,6 +2,7 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.actions.Movement.Companion.getValidSingleMovesForPiece
 import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
@@ -14,9 +15,9 @@ class Knight(
 
     override fun addValidMoves(validPositions: MutableList<Position>, board: Board) {
         validPositions.addAll(
-            board.getValidSingleMovesForPiece(
+            getValidSingleMovesForPiece(
                 color,
-                position!!.getJumpingPositionsInAllDirections()
+                board.getTilesFor(position!!.getJumpingPositionsInAllDirections())
             )
         )
     }

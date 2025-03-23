@@ -2,6 +2,7 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.actions.Movement.Companion.getValidLinearMovesForPiece
 import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
@@ -16,27 +17,27 @@ class Bishop(
         board: Board
     ) {
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsNorthEast()
+                board.getTilesFor(position!!.getPositionsNorthEast())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsSouthEast()
+                board.getTilesFor(position!!.getPositionsSouthEast())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsSouthWest()
+                board.getTilesFor(position!!.getPositionsSouthWest())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsNorthWest()
+                board.getTilesFor(position!!.getPositionsNorthWest())
             )
         )
     }

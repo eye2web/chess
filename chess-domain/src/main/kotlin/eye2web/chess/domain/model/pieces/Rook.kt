@@ -2,6 +2,7 @@ package eye2web.chess.domain.model.pieces
 
 import eye2web.chess.domain.Board
 import eye2web.chess.domain.model.Color
+import eye2web.chess.domain.model.actions.Movement.Companion.getValidLinearMovesForPiece
 import eye2web.chess.domain.model.pieces.base.BasePiece
 import eye2web.chess.domain.model.position.Position
 
@@ -13,27 +14,27 @@ class Rook(
 
     override fun addValidMoves(validPositions: MutableList<Position>, board: Board) {
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsNorth()
+                board.getTilesFor(position!!.getPositionsNorth())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsEast()
+                board.getTilesFor(position!!.getPositionsEast())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsSouth()
+                board.getTilesFor(position!!.getPositionsSouth())
             )
         )
         validPositions.addAll(
-            board.getValidLinearMovesForPiece(
+            getValidLinearMovesForPiece(
                 color,
-                position!!.getPositionsWest()
+                board.getTilesFor(position!!.getPositionsWest())
             )
         )
     }
